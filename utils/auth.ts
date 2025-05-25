@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as WebBrowser from "expo-web-browser";
+import { Platform } from "react-native";
 import { INTRA_API_CONFIG } from "../config/api";
 
 // Storage keys
@@ -12,15 +13,19 @@ WebBrowser.maybeCompleteAuthSession();
 //login
 export const login = async () => {
   try {
-    const result = await WebBrowser.openAuthSessionAsync(INTRA_API_CONFIG.AUTH_URL, INTRA_API_CONFIG.REDIRECT_URI);
+    const isWeb = Platform.OS === "web";
+    const authUrl = isWeb ? INTRA_API_CONFIG.WEB_AUTH_URL : INTRA_API_CONFIG.MOBILE_AUTH_URL;
+    const redirectUri = isWeb ? INTRA_API_CONFIG.WEB_REDIRECT_URI : INTRA_API_CONFIG.MOBILE_REDIRECT_URI;
+
+    const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
 
     if (result.type === "success") {
       const { url } = result;
       const code = url.split("code=")[1]?.split("&")[0];
 
       if (code) {
-        // Exchange code for token
-        const tokenData = await getTokenFromCode(code);
+        // Exchange code for token, passing the platform-specific redirect URI
+        const tokenData = await getTokenFromCode(code, redirectUri);
         return tokenData;
       } else {
         console.log("🔐 [AUTH] No code found in redirect URL");
@@ -36,14 +41,14 @@ export const login = async () => {
 };
 
 //get token from code
-const getTokenFromCode = async (code: string) => {
+const getTokenFromCode = async (code: string, redirectUri: string) => {
   try {
     const tokenRequestBody = {
       grant_type: "authorization_code",
       client_id: INTRA_API_CONFIG.CLIENT_ID,
       client_secret: INTRA_API_CONFIG.CLIENT_SECRET,
       code,
-      redirect_uri: INTRA_API_CONFIG.REDIRECT_URI,
+      redirect_uri: redirectUri,
     };
 
     const response = await fetch(INTRA_API_CONFIG.TOKEN_ENDPOINT, {
@@ -67,7 +72,7 @@ const getTokenFromCode = async (code: string) => {
     }
     return {
       success: false,
-      error: "Failed to get access token",
+      error: data.error_description || data.error || "Failed to get access token",
     };
   } catch (error) {
     console.error("🔑 [TOKEN] Error getting token:", error);

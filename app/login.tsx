@@ -15,7 +15,8 @@ export default function LoginScreen() {
       const result = await login();
 
       if (result && result.success) {
-        router.replace("/home");
+        console.log("Login successful, redirecting to tabs");
+        router.replace("/(tabs)");
       } else {
         setError(result?.error || "Login failed. Please try again.");
       }
