@@ -22,6 +22,7 @@ export function useUserSearch() {
   const [error, setError] = useState<string | null>(null);
 
   const searchUser = async (login: string) => {
+    console.log("searchUser", login);
     if (!login.trim()) {
       setError("Please enter a 42 login");
       return;

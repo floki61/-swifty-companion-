@@ -12,19 +12,19 @@ interface ProjectTabsProps {
 }
 
 export function ProjectTabs({ activeTab, setActiveTab, completedCount, inProgressCount, failedCount }: ProjectTabsProps) {
-  const renderTab = (tabName: TabType, label: string, count: number, active: boolean) => (
-    <TouchableOpacity className={`flex-1 py-3 items-center border-b-2 ${active ? "border-green-500" : "border-gray-700"}`} onPress={() => setActiveTab(tabName)}>
-      <Text className={`font-medium ${active ? "text-green-500" : "text-gray-400"}`}>
-        {label} ({count})
-      </Text>
-    </TouchableOpacity>
-  );
-
   return (
     <View className="flex-row border-b border-gray-800 mb-4">
-      {renderTab("completed", "Completed", completedCount, activeTab === "completed")}
-      {renderTab("in_progress", "In Progress", inProgressCount, activeTab === "in_progress")}
-      {renderTab("failed", "Failed", failedCount, activeTab === "failed")}
+      <TouchableOpacity className={`flex-1 py-3 items-center border-b-2 ${activeTab === "completed" ? "border-green-500" : "border-gray-700"}`} onPress={() => setActiveTab("completed")}>
+        <Text className={`font-medium ${activeTab === "completed" ? "text-green-500" : "text-gray-400"}`}>Completed ({completedCount})</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity className={`flex-1 py-3 items-center border-b-2 ${activeTab === "in_progress" ? "border-green-500" : "border-gray-700"}`} onPress={() => setActiveTab("in_progress")}>
+        <Text className={`font-medium ${activeTab === "in_progress" ? "text-green-500" : "text-gray-400"}`}>In Progress ({inProgressCount})</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity className={`flex-1 py-3 items-center border-b-2 ${activeTab === "failed" ? "border-green-500" : "border-gray-700"}`} onPress={() => setActiveTab("failed")}>
+        <Text className={`font-medium ${activeTab === "failed" ? "text-green-500" : "text-gray-400"}`}>Failed ({failedCount})</Text>
+      </TouchableOpacity>
     </View>
   );
 }

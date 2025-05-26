@@ -18,7 +18,7 @@ export const getUserProfile = async () => {
       data: response,
     };
   } catch (error) {
-    console.error("📊 [API] Error fetching user profile:", error);
+    console.log("📊 [API] Error fetching user profile:", error);
     return {
       success: false,
       error: "Failed to fetch user profile",
@@ -37,7 +37,7 @@ export const getUserByLogin = async (login: string) => {
       data: response,
     };
   } catch (error) {
-    console.error(`📊 [API] Error fetching user ${login}:`, error);
+    console.log(`📊 [API] Error fetching user ${login}:`, error);
     return {
       success: false,
       error: `Failed to fetch user ${login}`,
@@ -56,7 +56,7 @@ export const getUserCoalition = async (userId: number) => {
       data: response,
     };
   } catch (error) {
-    console.error(`📊 [API] Error fetching coalitions for user ${userId}:`, error);
+    console.log(`📊 [API] Error fetching coalitions for user ${userId}:`, error);
     return {
       success: false,
       error: "Failed to fetch coalition information",
@@ -90,7 +90,7 @@ const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
   const token = await AsyncStorage.getItem(ACCESS_TOKEN_KEY);
 
   if (!token) {
-    console.error("🔌 [API] No access token available");
+    console.log("🔌 [API] No access token available");
     throw new Error("No access token available");
   }
 
@@ -106,7 +106,7 @@ const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    console.error("🔌 [API] API error:", response.status, errorData);
+    console.log("🔌 [API] API error:", response.status, errorData);
     throw new Error(`API request failed: ${response.status} ${response.statusText}`);
   }
 
