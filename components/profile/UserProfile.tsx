@@ -8,28 +8,22 @@ interface UserProfileProps {
 }
 
 export function UserProfile({ user }: UserProfileProps) {
-  // Get the current cursus level
+  console.log("user", user);
   const currentCursus = user.cursus_users?.find((c) => c.cursus.slug === "42cursus" || c.cursus_id === 21);
   const level = currentCursus?.level || 0;
-  // Calculate level percentage (max level is 21)
   const levelPercentage = Math.min((level / 21) * 100, 100);
-
-  // Get display name from available fields
   const displayName = user.displayname || (user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.login);
-
-  // Get profile image URL
   const profileImage = user.image?.link || user.image_url;
-
-  // Get top 3 projects
   const topProjects =
     user.projects_users?.slice(0, 3).map((p) => ({
       name: p.project?.name || "Unknown Project",
       score: p.final_mark || 0,
       status: p.status,
     })) || [];
+  const skills = currentCursus?.skills || [];
 
   return (
-    <ScrollView className="flex-1 pb-20">
+    <ScrollView className="flex-1">
       {/* User header with profile image */}
       <View className="items-center py-8 px-4 border-b border-gray-800">
         {profileImage && (
@@ -101,6 +95,56 @@ export function UserProfile({ user }: UserProfileProps) {
         </View>
       </View>
 
+      {/* Skills Section */}
+      <View className="mx-4 rounded-xl overflow-hidden mb-6 bg-gray-900 shadow-md">
+        <View className="bg-gray-800 px-5 py-3 flex-row items-center">
+          <IconSymbol name="sparkles" size={18} color="#10b981" />
+          <Text className="text-white font-bold text-lg ml-2">Skills</Text>
+        </View>
+
+        <View className="p-5">
+          {skills && skills.length > 0 ? (
+            <>
+              <Text className="text-gray-400 text-sm mb-5">These are your coding skills based on completed projects</Text>
+              {skills.map((skill, index) => {
+                // Calculate percentage - assuming max skill level is 21
+                const percentage = Math.min(Math.round((skill.level / 21) * 100), 100);
+
+                return (
+                  <View key={index} className={`mb-6 ${index < skills.length - 1 ? "" : ""}`}>
+                    <View className="flex-row justify-between mb-1 items-center">
+                      <View className="flex-row items-center">
+                        <Text className="text-white font-medium">{skill.name}</Text>
+                      </View>
+                      <View className="bg-gray-800 rounded-full px-2 py-1">
+                        <Text className="text-green-500 text-xs">{percentage}%</Text>
+                      </View>
+                    </View>
+
+                    <View className="mt-2">
+                      <View className="flex-row justify-between mb-1">
+                        <Text className="text-gray-400 text-xs">Level: {skill.level.toFixed(2)}</Text>
+                        <Text className="text-gray-400 text-xs">21.00</Text>
+                      </View>
+
+                      <View className="bg-gray-800 h-2.5 rounded-full w-full">
+                        <View className="bg-green-500 h-2.5 rounded-full" style={{ width: `${percentage}%` }} />
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
+            </>
+          ) : (
+            <View className="items-center py-6">
+              <IconSymbol name="exclamationmark.triangle" size={30} color="#a3a3a3" />
+              <Text className="text-white text-center mt-3">No skills data available</Text>
+              <Text className="text-gray-400 text-center text-sm mt-1">Complete more projects to build your skills</Text>
+            </View>
+          )}
+        </View>
+      </View>
+
       {/* Top Projects */}
       <View className="mx-4 rounded-xl overflow-hidden mb-6 bg-gray-900 shadow-md">
         <View className="bg-gray-800 px-5 py-3 flex-row items-center">
@@ -131,7 +175,7 @@ export function UserProfile({ user }: UserProfileProps) {
       </View>
 
       {/* Projects summary */}
-      <View className="mx-4 rounded-xl overflow-hidden mb-6 bg-gray-900 shadow-md">
+      {/* <View className="mx-4 rounded-xl overflow-hidden mb-6 bg-gray-900 shadow-md">
         <View className="bg-gray-800 px-5 py-3 flex-row items-center">
           <IconSymbol name="list.bullet" size={18} color="#10b981" />
           <Text className="text-white font-bold text-lg ml-2">Projects</Text>
@@ -143,7 +187,7 @@ export function UserProfile({ user }: UserProfileProps) {
             <Text className="text-green-500 text-xs font-bold">VIEW ALL</Text>
           </View>
         </View>
-      </View>
+      </View> */}
 
       {/* Extra padding to ensure the logout button is visible above the tab bar */}
       <View className="h-24" />

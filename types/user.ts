@@ -24,6 +24,11 @@ export interface UserInterface {
       slug: string;
       name: string;
     };
+    skills?: Array<{
+      id: number;
+      name: string;
+      level: number;
+    }>;
   }>;
   projects_users?: Array<{
     id: number;

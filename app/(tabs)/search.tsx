@@ -23,20 +23,16 @@ export default function SearchScreen() {
   };
 
   return (
-    <View className="flex-1 bg-black px-4">
+    <View className="flex-1 bg-black">
       <SearchInput searchQuery={searchQuery} setSearchQuery={setSearchQuery} handleSearch={handleSearch} error={error} />
-      <ScrollView className="flex-1 pb-20" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-        {
-        isLoading ? (
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+        {isLoading ? (
           <View className="flex-1 justify-center items-center pt-36">
             <ActivityIndicator size="large" color="#10b981" />
             <Text className="text-green-500 mt-4">Searching...</Text>
           </View>
-        ) : 
-        userData ? (
-          <View className="flex-1">
-            <UserProfile user={userData} />
-          </View>
+        ) : userData ? (
+          <UserProfile user={userData} />
         ) : error ? (
           <View className="flex-1 items-center pt-36">
             <IconSymbol name="exclamationmark.circle" size={60} color="#ef4444" />
@@ -50,7 +46,6 @@ export default function SearchScreen() {
             <Text className="text-gray-400 text-center mt-2">Enter a login name in the search box above</Text>
           </View>
         )}
-        <View className="h-24" />
       </ScrollView>
     </View>
   );
