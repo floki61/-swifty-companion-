@@ -5,7 +5,6 @@ import { View } from "react-native";
 import AuthGuard from "@/components/AuthGuard";
 import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import TabBarBackground from "@/components/ui/TabBarBackground";
 
 export default function TabLayout() {
   return (
@@ -17,15 +16,17 @@ export default function TabLayout() {
             tabBarInactiveTintColor: "#a3a3a3",
             headerShown: false,
             tabBarButton: HapticTab,
-            tabBarBackground: TabBarBackground,
             tabBarShowLabel: false,
             tabBarStyle: {
               backgroundColor: "#000000",
               borderTopWidth: 0,
+              borderTopColor: "transparent",
               paddingTop: 10,
               paddingBottom: 20,
               height: 80,
               position: "absolute",
+              shadowColor: "transparent",
+              elevation: 0,
             },
           }}
         >
