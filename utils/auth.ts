@@ -54,7 +54,10 @@ export const login = async () => {
       return { success: false, error: "Missing authentication configuration" };
     }
 
-    const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
+    const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri, {
+      // Force a fresh browser session
+      preferEphemeralSession: true,
+    });
 
     if (result.type === "success") {
       const { url } = result;

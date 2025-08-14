@@ -8,7 +8,7 @@ interface UserProfileProps {
 }
 
 export function UserProfile({ user }: UserProfileProps) {
-  console.log("user", user);
+  // console.log("user", user);
   const currentCursus = user.cursus_users?.find((c) => c.cursus.slug === "42cursus" || c.cursus_id === 21);
   const level = currentCursus?.level || 0;
   const levelPercentage = Math.min((level / 21) * 100, 100);
